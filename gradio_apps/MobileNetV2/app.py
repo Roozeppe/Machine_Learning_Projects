@@ -5,13 +5,26 @@ import gradio as gr
 
 inception_net = tf.keras.applications.MobileNetV2()
 
-# Open categorical labels for reading.
+import requests
+
+# Download human-readable labels for ImageNet.
+response = requests.get("https://git.io/JJkYN")
+labels = response.text.split("\n")
+
+
+'''
+
+Uncomment to use local file for labels
+
+Open categorical labels for reading.
 file_obj = open('labels.txt', 'r')
 
 response = file_obj.read()
 labels = response.splitlines()
 
 file_obj.close()
+
+'''
 
 def classify_image(inp):
   
@@ -34,4 +47,4 @@ def classify_image(inp):
 gr.Interface(fn=classify_image,
              inputs=gr.Image(type='pil'),
              outputs=gr.Label(num_top_classes=3),
-            ).launch(share=True)
+            ).launch(share=False)
